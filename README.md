@@ -5,7 +5,7 @@ Play OpenAI Gym game of [Pong](https://gym.openai.com/envs/Pong-v0/) using Deep 
 
 ## Environments
 
-* Windows 10
+* Windows 10 or Ubuntu
 * GPU: Nvidia GeForce 1070
 * CUDA Version: 11.1
 * Python 3.7.7
@@ -23,7 +23,7 @@ pip install gym
 pip install --no-index -f https://github.com/Kojoley/atari-py/releases atari_py
 ```
 
-在 Windows 上安装 `ffmpeg` (用于在 `gym` 中录制视频)
+安装 `ffmpeg` (用于在 `gym` 中录制视频)：
 
 * 从 https://github.com/BtbN/FFmpeg-Builds/releases 下载 [ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3.zip](https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2020-12-07-12-50/ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3.zip)
 * 解压缩，并添加该路径至环境变量：`ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3/bin`
@@ -47,15 +47,19 @@ pip insatll gym
 pip install gym[atari]
 ```
 
+安装 `ffmpeg`
 
+```sh
+sudo apt-get install ffmpeg
+```
 
 ## Pong
 
 [Pong](https://gym.openai.com/envs/Pong-v0/) 是 Atari 的一款乒乓球游戏。Pong 的界面由简单的二维图形组成，当玩家将球打过去，对手没有把球接住并打回来时，玩家得 1 分。当一个玩家达到 21 分时，一集 (episode) 结束。在 OpenAI Gym 框架版本的 Pong 中，Agent 显示在右侧，对手显示在左侧。
 
-![](https://miro.medium.com/max/160/1*SyVOBX2CHJU2EBKkUrooMA.gif)
+![pong](assets/pong.gif)
 
-<center>图片来自 <a href="#2">[2]</a></center>
+（图片来自 [[2]](#2)）
 
 在 Pong 环境中，一个 Agent（玩家）可以采取三个动作：保持静止、垂直向上平移和垂直向下平移。但是，如果我们使用`action_space.n` 方法，我们可以发现环境有6个动作：
 
@@ -87,17 +91,17 @@ print(test_env.observation_space.shape)
 
 游戏中的每一帧图像是 210 × 160 × 3 的 RGB 图像。为了降低复杂性，我们可以将帧转换为灰度，并将它们缩小到一个84 × 84像素的正方形块。但是，仅仅根据一帧图像，我们无法知道球朝哪个方向移动。解决办法是保留一些过去的观察结果，并将它们作为一个状态使用。在Atari 游戏中，在 [[1]](#1) 中作者建议将4个后续帧叠加在一起，作为每个状态下的观察值。因此，预处理将四个帧堆叠在一起，最终状态空间大小为 84 × 84 × 4：
 
-![](https://miro.medium.com/max/922/1*bBMPOx6VcVkyYCjVk2Ss0w.png)
+![input](assets/input.png)
 
-<center>图片来自 <a href="#2">[2]</a></center>
+（图片来自 [[2]](#2)）
 
 ### Output
 
 与传统强化学习设置（一次只产生一个 Q 值）不同DQN 在一次前向传播中为环境中的每个可能的动作 (action) 产生一个Q值：
 
-![Image for post](https://miro.medium.com/max/957/1*Ym-iuHnUWTQrjeDSIqmhRg.png)
+![output](assets/output.png)
 
-<center>图片来自 <a href="#2">[2]</a></center>
+（图片来自 [[2]](#2)）
 
 这种方法通过一次网络前向计算就得到了所有 action 的 Q 值，避免了每个 action 都必须单独运行网络，显著提高了速度。这样，我们可以通过选择这个输出的向量的最大值来执行一个动作。
 
@@ -314,9 +318,9 @@ def make_env(env_name):
 
 Deep Q-Learning 算法的伪代码如下所示：
 
-![Image for post](https://miro.medium.com/max/734/1*lSMJQIIYY7pEeC-fTSHf3Q.png)
+![algorithm](assets/algorithm.png)
 
-<center>图片来自 <a href="#2">[2]</a></center>
+（图片来自 [[2]](#2)）
 
 在 Deep Q-Learning 算法中，training loop 有两个主要的阶段。
 

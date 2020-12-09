@@ -11,9 +11,9 @@ from model import DQN
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4" 
 FPS = 25
 
-model = 'runs\Dec08_21-54-22_DESKTOP-HTJU0PR-PongNoFrameskip-v4\PongNoFrameskip-v4-best.pt'
-record_folder = "video"  
-visualize = True
+model = 'runs/Dec07_21-37-11_DESKTOP-HTJU0PR-PongNoFrameskip-v4/PongNoFrameskip-v4-best.dat'
+record_folder = "video"
+visualize = False
 
 env = make_env(DEFAULT_ENV_NAME)
 if record_folder:

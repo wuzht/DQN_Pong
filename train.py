@@ -10,43 +10,41 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.utils.tensorboard import SummaryWriter
 
-from utils import ExperienceReplay, Agent, Logger
+from utils import ExperienceReplay, Agent, Logger, choose_gpu
 from gym_wrappers import make_env
 from model import DQN
 
+# Environments
 cur_dir = os.path.join('./exp', datetime.datetime.strftime(datetime.datetime.now(), '%m%d-%H%M%S'))
 if not os.path.exists(cur_dir):
     os.makedirs(cur_dir)
 log = Logger(os.path.join(cur_dir, 'train.log')).logger
-device = torch.device("cuda:0")
+device = torch.device("cuda:{}".format(choose_gpu()[0]))
 
 # Hyperparameters
-DEFAULT_ENV_NAME = "PongNoFrameskip-v4" # identify the Environment to train on
-MEAN_REWARD_BOUND = 19.0                # reward boundary to stop training
-gamma = 0.99                            # the discount factor
-batch_size = 32                         # the minibatch size
-replay_size = 10000                     # the replay buffer size (maximum number of experiences stored in replay memory)
-learning_rate = 1e-4                    # the learning rate
-sync_target_frames = 1000               # indicates how frequently we sync model weights from the main DQN network to the target DQN network (how many frames in between syncing)
-replay_start_size = 10000               # the count of frames (experiences) to add to replay buffer before starting training
+DEFAULT_ENV_NAME   = "PongNoFrameskip-v4"   # identify the Environment to train on
+MEAN_REWARD_BOUND  = 19.0                   # reward boundary to stop training
+gamma              = 0.99                   # the discount factor
+batch_size         = 32                     # the minibatch size
+replay_size        = 10000                  # the replay buffer size (maximum number of experiences stored in replay memory)
+learning_rate      = 1e-4                   # the learning rate
+sync_target_frames = 1000                   # indicates how frequently we sync model weights from the main DQN network to the target DQN network (how many frames in between syncing)
+replay_start_size  = 10000                  # the count of frames (experiences) to add to replay buffer before starting training
 
 eps_start = 1.0
 eps_decay = 0.999985
-eps_min = 0.02
+eps_min   = 0.02
 
-log.critical('Hyperparameters:\n{}'.format({
-    key: value for key, value in globals().items() if (type(value) == int or type(value) == float or type(value) == str)
-    and not key.startswith('_')
-}))
+for key, val in {k: v for k, v in globals().items() if (type(v) == int or type(v) == float or type(v) == str) and not k.startswith('_')}.items():
+    log.critical('{}: {}'.format(key, val))
 
 # Training
 env = make_env(DEFAULT_ENV_NAME)
 net = DQN(env.observation_space.shape, env.action_space.n).to(device)
 target_net = DQN(env.observation_space.shape, env.action_space.n).to(device)
 optimizer = optim.Adam(net.parameters(), lr=learning_rate)
-writer = SummaryWriter(log_dir=cur_dir)
- 
 agent = Agent(env, ExperienceReplay(replay_size))
+writer = SummaryWriter(log_dir=cur_dir)
 
 epsilon = eps_start
 total_rewards = []
@@ -68,6 +66,7 @@ while True:
         writer.add_scalar("epsilon", epsilon, len(total_rewards))
         writer.add_scalar("reward_100", mean_reward, len(total_rewards))
         writer.add_scalar("reward", reward, len(total_rewards))
+        writer.flush()
 
         if best_mean_reward is None or best_mean_reward < mean_reward:
             torch.save(net.state_dict(), os.path.join(cur_dir, "best.pt"))

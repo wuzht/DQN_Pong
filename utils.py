@@ -2,6 +2,7 @@ import collections
 import torch
 import numpy as np
 import random
+import os
 import logging
 from logging import handlers
 
@@ -77,3 +78,24 @@ class Logger(object):
         th.setFormatter(format_str)
         self.logger.addHandler(sh)
         self.logger.addHandler(th)
+
+
+def choose_gpu(gpu_not_use=[]):
+    """
+    return the id of the gpu with the most memory
+    """
+    # query GPU memory and save the result in `tmp`
+    os.system('nvidia-smi -q -d Memory |grep -A4 GPU|grep Free >tmp')
+    # read the file `tmp` to get a gpu memory list
+    memory_gpu = [int(x.split()[2]) for x in open('tmp','r').readlines()]
+
+    for i in gpu_not_use:
+        memory_gpu[i] = 0   # not use these gpus
+
+    # get the id of the gpu with the most memory
+    gpu_id = str(np.argmax(memory_gpu))
+    # remove the file `tmp`
+    os.system('rm tmp')
+
+    # msg = 'memory_gpu: {}'.format(memory_gpu)
+    return gpu_id, memory_gpu
