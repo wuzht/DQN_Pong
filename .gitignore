@@ -1,6 +1,8 @@
 runs/
 video/
+exp/
 *.dat
+*.pt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

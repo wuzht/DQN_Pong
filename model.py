@@ -2,7 +2,7 @@
 # Taken from 
 # https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter06/lib/dqn_model.py
 import torch
-import torch.nn as nn        # Pytorch neural network package
+import torch.nn as nn
 import numpy as np
 from gym_wrappers import make_env
 
@@ -13,17 +13,17 @@ class DQN(nn.Module):
 
         self.conv = nn.Sequential(
             nn.Conv2d(input_shape[0], 32, kernel_size=8, stride=4),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Conv2d(32, 64, kernel_size=4, stride=2),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Conv2d(64, 64, kernel_size=3, stride=1),
-            nn.ReLU()
+            nn.ReLU(inplace=True)
         )
 
         conv_out_size = self._get_conv_out(input_shape)
         self.fc = nn.Sequential(
             nn.Linear(conv_out_size, 512),
-            nn.ReLU(),
+            nn.ReLU(inplace=True),
             nn.Linear(512, n_actions)
         )
 
@@ -44,18 +44,17 @@ if __name__ == "__main__":
     test_net = DQN(test_env.observation_space.shape, test_env.action_space.n).to(device)
     print(test_net)
     # DQN(
-    #   (conv): Sequential(
+    # (conv): Sequential(
     #     (0): Conv2d(4, 32, kernel_size=(8, 8), stride=(4, 4))
-    #     (1): ReLU()
+    #     (1): ReLU(inplace=True)
     #     (2): Conv2d(32, 64, kernel_size=(4, 4), stride=(2, 2))
-    #     (3): ReLU()
+    #     (3): ReLU(inplace=True)
     #     (4): Conv2d(64, 64, kernel_size=(3, 3), stride=(1, 1))
-    #     (5): ReLU()
-    #   )
-    #   (fc): Sequential(
-    #     (0): Linear(in_features=3136, out_features=512, bias=True)
-    #     (1): ReLU()
-    #     (2): Linear(in_features=512, out_features=6, bias=True)
-    #   )
+    #     (5): ReLU(inplace=True)
     # )
-    
+    # (fc): Sequential(
+    #     (0): Linear(in_features=3136, out_features=512, bias=True)
+    #     (1): ReLU(inplace=True)
+    #     (2): Linear(in_features=512, out_features=6, bias=True)
+    # )
+    # )

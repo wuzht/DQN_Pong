@@ -2,7 +2,6 @@
 # Taken from 
 # https://github.com/PacktPublishing/Deep-Reinforcement-Learning-Hands-On/blob/master/Chapter06/lib/wrappers.py
 import gym
-
 import cv2
 import numpy as np
 import collections
@@ -125,8 +124,6 @@ def make_env(env_name):
 if __name__ == "__main__":
     DEFAULT_ENV_NAME = "PongNoFrameskip-v4" 
     test_env = gym.make(DEFAULT_ENV_NAME)
-
     print(test_env.action_space.n)                  # 6
     print(test_env.unwrapped.get_action_meanings()) # ['NOOP', 'FIRE', 'RIGHT', 'LEFT', 'RIGHTFIRE', 'LEFTFIRE']
-    print(test_env.unwrapped.get_action_meanings()) # (210, 160, 3)
-    
+    print(test_env.observation_space.shape)         # (210, 160, 3)

@@ -11,7 +11,7 @@ from model import DQN
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4" 
 FPS = 25
 
-model = 'PongNoFrameskip-v4-best.dat'
+model = 'runs\Dec08_21-54-22_DESKTOP-HTJU0PR-PongNoFrameskip-v4\PongNoFrameskip-v4-best.pt'
 record_folder = "video"  
 visualize = True
 
@@ -19,7 +19,7 @@ env = make_env(DEFAULT_ENV_NAME)
 if record_folder:
     env = gym.wrappers.Monitor(env, record_folder, force=True)
 net = DQN(env.observation_space.shape, env.action_space.n)
-net.load_state_dict(torch.load(model, map_location=lambda storage, loc: storage))
+net.load_state_dict(torch.load(model, map_location=torch.device('cpu')))
 
 state = env.reset()
 total_reward = 0.0
