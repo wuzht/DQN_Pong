@@ -1,5 +1,6 @@
 import time
 import os
+import sys
 import datetime
 import warnings
 warnings.filterwarnings('ignore')
@@ -19,7 +20,8 @@ cur_dir = os.path.join('./exp', datetime.datetime.strftime(datetime.datetime.now
 if not os.path.exists(cur_dir):
     os.makedirs(cur_dir)
 log = Logger(os.path.join(cur_dir, 'train.log')).logger
-device = torch.device("cuda:{}".format(choose_gpu()[0]))
+device = (torch.device('cuda:{}'.format(choose_gpu()[0])) if 'linux' in sys.platform else torch.device('cuda:0')) \
+    if torch.cuda.is_available() else torch.device('cpu')
 
 # Hyperparameters
 DEFAULT_ENV_NAME   = "PongNoFrameskip-v4"   # identify the Environment to train on
