@@ -14,13 +14,12 @@ Play OpenAI Gym game of [Pong](https://gym.openai.com/envs/Pong-v0/) using Deep 
 * gym 0.17.3
 * atari-py 1.2.2
 
-Environments set up (on Windows):
+**Windows**
+
+安装 `gym` 和 `atari`：
 
 ```bash
-# install gym
-pip insatll gym
-
-# install atari-py (on Windows)
+pip install gym
 pip install --no-index -f https://github.com/Kojoley/atari-py/releases atari_py
 ```
 
@@ -29,6 +28,24 @@ pip install --no-index -f https://github.com/Kojoley/atari-py/releases atari_py
 * 从 https://github.com/BtbN/FFmpeg-Builds/releases 下载 [ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3.zip](https://github.com/BtbN/FFmpeg-Builds/releases/download/autobuild-2020-12-07-12-50/ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3.zip)
 * 解压缩，并添加该路径至环境变量：`ffmpeg-n4.3.1-26-gca55240b8c-win64-gpl-4.3/bin`
 * 打开命令行，输入 `ffmpeg -version` 看是否成功安装 `ffmpeg`
+
+**Ubuntu**
+
+安装 atari 之前，必须安装 `cmake` 和 `zlib`：
+
+> [Problem installing Atari](https://github.com/openai/gym/issues/779)
+
+```bash
+sudo apt install cmake
+sudo apt install zlib1g-dev
+```
+
+然后安装 `gym` 和 `atari`：
+
+```bash
+pip insatll gym
+pip install gym[atari]
+```
 
 
 
