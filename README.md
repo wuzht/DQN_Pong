@@ -111,7 +111,7 @@ print(test_env.unwrapped.get_action_meanings())
 
 ### 3.1 Input
 
-Atari 游戏以 210 × 60 像素的分辨率显示，每个像素有 128 种可能的颜色：
+Atari 游戏以 210 × 160 像素的分辨率显示，每个像素有 128 种可能的颜色：
 
 ```python
 print(test_env.observation_space.shape)
