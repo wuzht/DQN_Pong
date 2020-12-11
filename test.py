@@ -11,7 +11,7 @@ from model import DQN
 DEFAULT_ENV_NAME = "PongNoFrameskip-v4" 
 FPS = 25
 
-model = 'runs/Dec07_21-37-11_DESKTOP-HTJU0PR-PongNoFrameskip-v4/PongNoFrameskip-v4-best.dat'
+model = 'exp/1209-215314/best.pt'
 record_folder = "video"
 visualize = False
 
@@ -24,23 +24,24 @@ net.load_state_dict(torch.load(model, map_location=torch.device('cpu')))
 state = env.reset()
 total_reward = 0.0
 
-while True:
-    start_ts = time.time()
-    if visualize:
-        env.render()
-    state_v = torch.tensor(np.array([state], copy=False))
-    q_vals = net(state_v).data.numpy()[0]
-    action = np.argmax(q_vals)
-    
-    state, reward, done, _ = env.step(action)
-    total_reward += reward
-    if done:
-        break
-    if visualize:
-        delta = 1/FPS - (time.time() - start_ts)
-        if delta > 0:
-            time.sleep(delta)
-print("Total reward: %.2f" % total_reward)
+with torch.no_grad():
+    while True:
+        start_ts = time.time()
+        if visualize:
+            env.render()
+        state_v = torch.tensor(np.array([state], copy=False))
+        q_vals = net(state_v).data.numpy()[0]
+        action = np.argmax(q_vals)
+        
+        state, reward, done, _ = env.step(action)
+        total_reward += reward
+        if done:
+            break
+        if visualize:
+            delta = 1/FPS - (time.time() - start_ts)
+            if delta > 0:
+                time.sleep(delta)
+    print("Total reward: %.2f" % total_reward)
 
 if record_folder:
     env.close()
