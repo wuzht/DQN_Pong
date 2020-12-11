@@ -347,7 +347,7 @@ def make_env(env_name):
 
 Deep Q-Learning 算法的伪代码如下所示：
 
-<img src="assets/algorithm.png" width=70% align=left>
+![algorithm](assets/algorithm.png)
 
 （图片来自 [[2]](#2)）
 
@@ -399,9 +399,7 @@ optimizer = optim.Adam(net.parameters(), lr=learning_rate)	# 优化器为Adam
 </table>
 <center>Fig 1. 默认超参数的训练过程。其中，各图横坐标为 games (episodes)。(a) epsilon 的变化图。(b) reward 的变化图。(c) 近 100 个 games (episodes) 的平均 reward 变化图。</center>
 
-运行 `test.py` 代码对该模型进行测试，测试结果的 reward 为 21，视频见文件 `video.mp4`。
-
-<video src="assets/video.mp4"></video>
+运行 `test.py` 代码对该模型进行测试，**测试结果的 reward 为 21**，视频见文件 `video.mp4`。
 
 ### 8.2 不同超参数对实验结果的影响
 
@@ -413,11 +411,11 @@ optimizer = optim.Adam(net.parameters(), lr=learning_rate)	# 优化器为Adam
 
 在默认参数的基础上，控制其他超参数不变，改变 `learning_rate`，实验结果如下：
 
-| exp         | learning_rate | games | frames  | mean reward | 是否收敛 |
-| ----------- | ------------- | ----- | ------- | ----------- | -------- |
-| 1209-215314 | 1e-4          | 406   | 771807  | 19.03       | 是       |
-| 1209-215341 | 1e-3          | 2494  | 1998641 | -20.95      | 否       |
-| 1209-215353 | 1e-5          | 1377  | 3036438 | 19.01       | 是       |
+| exp         | learning_rate | games | frames  | mean reward | 是否收敛 | 测试 reward |
+| ----------- | ------------- | ----- | ------- | ----------- | -------- | ----------- |
+| 1209-215314 | 1e-4          | 406   | 771807  | 19.03       | 是       | 21          |
+| 1209-215341 | 1e-3          | 2494  | 1998641 | -20.95      | 否       | -21         |
+| 1209-215353 | 1e-5          | 1377  | 3036438 | 19.01       | 是       | 21          |
 
 其中表头的意义如下：
 
@@ -425,6 +423,7 @@ optimizer = optim.Adam(net.parameters(), lr=learning_rate)	# 优化器为Adam
 * games: 模型共训练了多少个 games
 * frames: 模型共训练了多少个 frames
 * mean reward: 训练结束时近 100 个 episode 的 mean reward
+* 测试 reward: 运行 `test.py` 加载模型并对其进行测试
 
 训练过程中的 epsilon, reward, mean reward 变化曲线如下：
 
@@ -441,11 +440,11 @@ optimizer = optim.Adam(net.parameters(), lr=learning_rate)	# 优化器为Adam
 
 在默认参数的基础上，控制其他超参数不变，改变 `sync_target_frames`，实验结果如下：
 
-| exp         | sync_target_frames | games | frames  | mean reward | 是否收敛 |
-| ----------- | ------------------ | ----- | ------- | ----------- | -------- |
-| 1209-215314 | 1000               | 406   | 771807  | 19.03       | 是       |
-| 1209-215432 | 100                | 741   | 1382139 | 19.03       | 是       |
-| 1209-215446 | 10000              | 1375  | 2730985 | 19.03       | 是       |
+| exp         | sync_target_frames | games | frames  | mean reward | 是否收敛 | 测试 reward |
+| ----------- | ------------------ | ----- | ------- | ----------- | -------- | ----------- |
+| 1209-215314 | 1000               | 406   | 771807  | 19.03       | 是       | 21          |
+| 1209-215432 | 100                | 741   | 1382139 | 19.03       | 是       | 21          |
+| 1209-215446 | 10000              | 1375  | 2730985 | 19.03       | 是       | 21          |
 
 训练过程中的 epsilon, reward, mean reward 变化曲线如下：
 
